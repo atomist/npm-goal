@@ -12,7 +12,7 @@ npm-test:
     - -c
     - npm ci && npm run compile --if-present && npm run test --if-present
   output:
-  - classifier: compile-ts
+  - classifier: npm-test
     pattern:
       glob_pattern:
       - "*.{d.ts,js}{,.map}"
