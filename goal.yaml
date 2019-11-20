@@ -1,7 +1,9 @@
+&node_image: node:lts 
+
 npm-test:
   containers:
   - name: npm test
-    image: node:lts
+    image: *node_image
     env:
     - name: NODE_ENV
       value: development
@@ -20,3 +22,16 @@ npm-test:
       - "lib/typings/types.ts"
       - "git-info.json"
   retry: true  
+
+npm-publish:
+  containers:
+  - name: npm publish
+    image: *node_image
+    args:
+    - sh
+    - -c
+    - npm publish --tag branch-${branch}
+  input:
+  - version
+  - npm-test
+   retry: true
