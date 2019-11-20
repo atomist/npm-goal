@@ -35,4 +35,4 @@ npm-publish:
   input:
   - version
   - npm-test
-   retry: true
+  retry: true
