@@ -1,0 +1,24 @@
+npm-test:
+  - containers:
+    - name: npm test
+      image: node:lts
+      env:
+      - name: NODE_ENV
+        value: development
+      - name: BLUEBIRD_WARNINGS
+        value: '0'
+      args:
+      - sh
+      - -c
+      - npm ci && npm run compile --if-present && npm run test --if-present
+    output:
+    - classifier: compile-ts
+      pattern:
+        glob_pattern:
+        - "*.{d.ts,js}{,.map}"
+        - "!(node_modules)/**/*.{d.ts,js}{,.map}"
+        - "lib/typings/types.ts"
+        - "git-info.json"
+    retry: true  
+    
+---    
