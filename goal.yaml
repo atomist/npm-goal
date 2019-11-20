@@ -1,5 +1,4 @@
-images:
-- &node_image node:lts 
+&node_image node:lts 
 
 npm-test:
   containers:
@@ -32,6 +31,12 @@ npm-publish:
     - sh
     - -c
     - npm publish --tag branch-${branch}
+    secrets:
+      file_mounts:
+      - mount_path: /root/.npmrc
+        value:
+          provider:
+            type: npm
   input:
   - version
   - npm-test
