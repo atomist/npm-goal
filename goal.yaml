@@ -20,5 +20,3 @@ npm-test:
       - "lib/typings/types.ts"
       - "git-info.json"
   retry: true  
-    
----    
