@@ -1,4 +1,5 @@
-&node_image node:lts 
+images:
+- &node_image node:lts 
 
 npm-test:
   containers:
