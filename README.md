@@ -13,9 +13,6 @@ goal.
 ```yaml
 node_build:
   
-  test:
-  - has_file: package.json
-
   goals:
   - atomist/npm-goal/npm-test@master
 ```
@@ -26,13 +23,12 @@ Put the following YAML into your SDM goal definition to use the `npm-publish`
 goal.
 
 ```yaml
-node_build:
+node_publish:
   
-  test:
-  - has_file: package.json
-
   goals:
-  - atomist/npm-goal/npm-publish@master
+  - atomist/npm-goal/npm-publish@master:
+      parameters:
+        access: <optional access to package; allowed public or restricted; defaults to restricted>
 ```
 
 The `npm-publish` goal needs credentials to publish the NPM package to the 
