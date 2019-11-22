@@ -5,33 +5,33 @@ Delivery Machine (SDM).
 
 ## Usage
 
-### `npm-test`
+### NPM `test`
 
-Put the following YAML into your SDM goal definition to use the `npm-test`
+Put the following YAML into your SDM goal definition to use the `test`
 goal.
 
 ```yaml
 node_build:
   
   goals:
-  - atomist/npm-goal/npm-test@master
+  - atomist/npm-goal/test@master
 ```
 
-### `npm-publish`
+### NPM `publish`
 
-Put the following YAML into your SDM goal definition to use the `npm-publish`
+Put the following YAML into your SDM goal definition to use the `publish`
 goal.
 
 ```yaml
 node_publish:
   
   goals:
-  - atomist/npm-goal/npm-publish@master:
+  - atomist/npm-goal/publish@master:
       parameters:
         access: <optional access to package; allowed public or restricted; defaults to restricted>
 ```
 
-The `npm-publish` goal needs credentials to publish the NPM package to the 
+The `publish` goal needs credentials to publish the NPM package to the 
 registry. By default the goal will make all NPM resource providers from your
 Atomist workspace availabe to the goal. 
 
