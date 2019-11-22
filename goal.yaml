@@ -4,44 +4,44 @@ images:
 install:
   containers:
   - name: npm ${parameters.command:ci}
-      image: *node_image
-      env:
-      - name: NODE_ENV
-        value: development
-      - name: BLUEBIRD_WARNINGS
-        value: '0'
-      args:
-      - sh
-      - -c
-      - echo "atm:phase=npm ${parameters.command:ci}" &&
-      - npm ${parameters.command:ci}
-    output:
-    - classifier: node-modules
-      pattern:
-        directory: node_modules
-    retry: true
+    image: *node_image
+    env:
+    - name: NODE_ENV
+      value: development
+    - name: BLUEBIRD_WARNINGS
+      value: '0'
+    args:
+    - sh
+    - -c
+    - echo "atm:phase=npm ${parameters.command:ci}" &&
+    - npm ${parameters.command:ci}
+  output:
+  - classifier: node-modules
+    pattern:
+      directory: node_modules
+  retry: true
 
 compile:
   containers:
   - name: npm ${parameters.command:compile}
-      image: *node_image
-      args:
-        - sh
-        - -c
-        - echo "atm:phase=npm compile" &&
-        - npm run ${parameters.command:compile} --if-present
-    input:
-    - version
-    - node-modules
-    output:
-    - classifier: npm-compile
-      pattern:
-        glob_pattern:
-          - "*.{d.ts,js}{,.map}"
-          - "!(node_modules)/**/*.{d.ts,js}{,.map}"
-          - "lib/typings/types.ts"
-          - "git-info.json"
-    retry: true
+    image: *node_image
+    args:
+      - sh
+      - -c
+      - echo "atm:phase=npm compile" &&
+      - npm run ${parameters.command:compile} --if-present
+  input:
+  - version
+  - node-modules
+  output:
+  - classifier: npm-compile
+    pattern:
+      glob_pattern:
+        - "*.{d.ts,js}{,.map}"
+        - "!(node_modules)/**/*.{d.ts,js}{,.map}"
+        - "lib/typings/types.ts"
+        - "git-info.json"
+  retry: true
 
 test:
   containers:
