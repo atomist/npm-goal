@@ -3,7 +3,7 @@ images:
 
 install:
   containers:
-  - name: npm ${parameters.command:ci}
+  - name: npm ci
     image: *node_image
     env:
     - name: NODE_ENV
@@ -23,7 +23,7 @@ install:
 
 compile:
   containers:
-  - name: npm ${parameters.command:compile}
+  - name: npm compile
     image: *node_image
     args:
       - sh
