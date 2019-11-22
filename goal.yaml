@@ -3,7 +3,7 @@ images:
 
 install:
   containers:
-  - name: npm ci
+  - name: npm ${parameters.command:ci}
     image: *node_image
     env:
     - name: NODE_ENV
@@ -23,13 +23,13 @@ install:
 
 compile:
   containers:
-  - name: npm compile
+  - name: npm ${parameters.command:compile}
     image: *node_image
     args:
-      - sh
-      - -c
-      - echo "atm:phase=npm compile" &&
-      - npm run ${parameters.command:compile} --if-present
+    - sh
+    - -c
+    - echo "atm:phase=npm compile" &&
+    - npm run ${parameters.command:compile} --if-present
   input:
   - version
   - node-modules
