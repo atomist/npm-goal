@@ -1,7 +1,7 @@
 images:
-- &node_image node:lts 
+- &node_image node:lts
 
-npm-test:
+test:
   containers:
   - name: npm test
     image: *node_image
@@ -22,9 +22,9 @@ npm-test:
       - "!(node_modules)/**/*.{d.ts,js}{,.map}"
       - "lib/typings/types.ts"
       - "git-info.json"
-  retry: true  
+  retry: true
 
-npm-publish:
+publish:
   containers:
   - name: npm publish
     image: *node_image
