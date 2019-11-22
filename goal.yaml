@@ -1,27 +1,61 @@
 images:
-- &node_image node:lts
+- &node_image node:${parameter.tag:lts}
+
+install:
+  containers:
+  - name: npm ${parameters.command:ci}
+      image: *node_image
+      env:
+      - name: NODE_ENV
+        value: development
+      - name: BLUEBIRD_WARNINGS
+        value: '0'
+      args:
+      - sh
+      - -c
+      - echo "atm:phase=npm ${parameters.command:ci}" &&
+      - npm ${parameters.command:ci}
+    output:
+    - classifier: node-modules
+      pattern:
+        directory: node_modules
+    retry: true
+
+compile:
+  containers:
+  - name: npm ${parameters.command:compile}
+      image: *node_image
+      args:
+        - sh
+        - -c
+        - echo "atm:phase=npm compile" &&
+        - npm run ${parameters.command:compile} --if-present
+    input:
+    - version
+    - node-modules
+    output:
+    - classifier: npm-compile
+      pattern:
+        glob_pattern:
+          - "*.{d.ts,js}{,.map}"
+          - "!(node_modules)/**/*.{d.ts,js}{,.map}"
+          - "lib/typings/types.ts"
+          - "git-info.json"
+    retry: true
 
 test:
   containers:
   - name: npm test
     image: *node_image
-    env:
-    - name: NODE_ENV
-      value: development
-    - name: BLUEBIRD_WARNINGS
-      value: '0'
     args:
     - sh
     - -c
-    - npm ci && npm run compile --if-present && npm run test --if-present
-  output:
-  - classifier: npm-test
-    pattern:
-      glob_pattern:
-      - "*.{d.ts,js}{,.map}"
-      - "!(node_modules)/**/*.{d.ts,js}{,.map}"
-      - "lib/typings/types.ts"
-      - "git-info.json"
+    - echo "atm:phase=npm test" &&
+    - npm run test --if-present
+  input:
+  - version
+  - node-modules
+  - npm-compile
   retry: true
 
 publish:
@@ -31,6 +65,7 @@ publish:
     args:
     - sh
     - -c
+    - echo "atm:phase=npm publish" &&
     - npm publish --tag "`echo "branch-${branch}" | sed -e 's/[/_]/-/g' -e 's/[^-A-Za-z0-9.]//g' -e 's/--*/-/g' -e 's/-$//'`" --access ${parameters.access:restricted}
     secrets:
       file_mounts:
@@ -40,5 +75,5 @@ publish:
             type: npm
   input:
   - version
-  - npm-test
+  - npm-compile
   retry: true

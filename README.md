@@ -5,6 +5,47 @@ Delivery Machine (SDM).
 
 ## Usage
 
+### NPM `install`
+
+Put the following YAML into your SDM goal definition to use the `install`
+goal.
+
+```yaml
+node_build:
+  
+  goals:
+  - atomist/npm-goal/install@master
+      parameters:
+        tag: <optional tag of node Docker image>
+        command: <optional command to run; either ci or install; defaults to ci>
+```
+### NPM `compile`
+
+Put the following YAML into your SDM goal definition to use the `compile`
+goal.
+
+```yaml
+node_build:
+  
+  goals:
+  - atomist/npm-goal/compile@master
+      parameters:
+        tag: <optional tag of node Docker image>
+        command: <optional command to run; defaults to compile>
+```
+
+### NPM `test`
+
+Put the following YAML into your SDM goal definition to use the `test`
+goal.
+
+```yaml
+node_build:
+  
+  goals:
+  - atomist/npm-goal/test@master
+```
+
 ### NPM `test`
 
 Put the following YAML into your SDM goal definition to use the `test`
