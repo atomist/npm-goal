@@ -30,7 +30,7 @@ compile:
     - sh
     - -c
     - >-
-      echo "atm:phase=npm compile" &&
+      echo "atm:phase=npm ${parameters.command:compile}" &&
       npm run ${parameters.command:compile} --if-present
   input:
   - version
@@ -59,6 +59,32 @@ test:
   - version
   - node-modules
   - npm-compile
+  retry: true
+
+build:
+  containers:
+  - name: npm ${parameters.command:compile}
+    image: *node_image
+    args:
+    - sh
+    - -c
+    - >-
+      echo "atm:phase=npm ${parameters.command:ci}" &&
+      npm ${parameters.command:ci} &&
+      echo "atm:phase=npm ${parameters.command:compile}" &&
+      npm run ${parameters.command:compile} --if-present &&
+      echo "atm:phase=npm test" &&
+      npm run test --if-present
+  input:
+    - version
+  output:
+    - classifier: npm-compile
+      pattern:
+        glob_pattern:
+          - "*.{d.ts,js}{,.map}"
+          - "!(node_modules)/**/*.{d.ts,js}{,.map}"
+          - "lib/typings/types.ts"
+          - "git-info.json"
   retry: true
 
 publish:
