@@ -63,7 +63,7 @@ test:
 
 build:
   containers:
-  - name: npm ${parameters.command:compile}
+  - name: npm build
     image: *node_image
     args:
     - sh
