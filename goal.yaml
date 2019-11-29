@@ -69,8 +69,8 @@ build:
     - sh
     - -c
     - >-
-      echo "atm:phase=npm ${parameters.command:ci}" &&
-      npm ${parameters.command:ci} &&
+      [ -f package-lock.json ] && echo "atm:phase=npm ci" || echo "atm:phase=npm install" &&
+      [ -f package-lock.json ] && npm ci || npm install &&
       echo "atm:phase=npm ${parameters.command:compile}" &&
       npm run ${parameters.command:compile} --if-present &&
       echo "atm:phase=npm test" &&
