@@ -17,7 +17,7 @@ install:
       echo "atm:phase=npm ${parameters.command:ci}" &&
       npm ${parameters.command:ci}
   output:
-  - '${repo.owner}/${repo.name}/${branch}/${sha}/npm/node-modules'
+  - '${repo.owner}/${repo.name}/${branch}/${sha}/npm/node-modules':
     pattern:
       directory: node_modules
   retry: true
@@ -36,7 +36,7 @@ compile:
   - ${repo.owner}/${repo.name}/${branch}/${sha}/version
   - ${repo.owner}/${repo.name}/${branch}/${sha}/npm/node-modules
   output:
-  - '${repo.owner}/${repo.name}/${branch}/${sha}/npm/build'
+  - '${repo.owner}/${repo.name}/${branch}/${sha}/npm/build':
     pattern:
       glob_pattern:
         - "*.{d.ts,js}{,.map}"
@@ -78,7 +78,7 @@ build:
   input:
     - ${repo.owner}/${repo.name}/${branch}/${sha}/version
   output:
-    - '${repo.owner}/${repo.name}/${branch}/${sha}/npm/build'
+    - '${repo.owner}/${repo.name}/${branch}/${sha}/npm/build':
       pattern:
         glob_pattern:
           - "*.{d.ts,js}{,.map}"
