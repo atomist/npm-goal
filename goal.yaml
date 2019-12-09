@@ -17,7 +17,7 @@ install:
       echo "atm:phase=npm ${parameters.command:ci}" &&
       npm ${parameters.command:ci}
   output:
-  - classifier: node-modules
+  - classifier: ${repo.owner}/${repo.name}/${branch}/${sha}/npm/node-modules
     pattern:
       directory: node_modules
   retry: true
@@ -33,8 +33,8 @@ compile:
       echo "atm:phase=npm ${parameters.command:compile}" &&
       npm run ${parameters.command:compile} --if-present
   input:
-  - version
-  - node-modules
+  - ${repo.owner}/${repo.name}/${branch}/${sha}/version
+  - ${repo.owner}/${repo.name}/${branch}/${sha}/npm/node-modules
   output:
   - classifier: npm-compile
     pattern:
@@ -56,9 +56,9 @@ test:
       echo "atm:phase=npm test" &&
       npm run test --if-present
   input:
-  - version
-  - node-modules
-  - npm-compile
+  - ${repo.owner}/${repo.name}/${branch}/${sha}/version
+  - ${repo.owner}/${repo.name}/${branch}/${sha}/npm/node-modules
+  - ${repo.owner}/${repo.name}/${branch}/${sha}/npm/build
   retry: true
 
 build:
@@ -76,7 +76,7 @@ build:
       echo "atm:phase=npm test" &&
       npm run test --if-present
   input:
-    - version
+    - ${repo.owner}/${repo.name}/${branch}/${sha}/version
   output:
     - classifier: npm-compile
       pattern:
@@ -104,6 +104,6 @@ publish:
           provider:
             type: npm
   input:
-  - version
-  - npm-compile
+  - ${repo.owner}/${repo.name}/${branch}/${sha}/version
+  - ${repo.owner}/${repo.name}/${branch}/${sha}/npm/build
   retry: true
