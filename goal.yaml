@@ -18,8 +18,8 @@ install:
       npm ${parameters.command:ci}
   output:
   - '${repo.owner}/${repo.name}/${branch}/${sha}/npm/node-modules':
-    pattern:
-      directory: node_modules
+      pattern:
+        directory: node_modules
   retry: true
 
 compile:
@@ -37,8 +37,8 @@ compile:
   - ${repo.owner}/${repo.name}/${branch}/${sha}/npm/node-modules
   output:
   - '${repo.owner}/${repo.name}/${branch}/${sha}/npm/build':
-    pattern:
-      glob_pattern:
+      pattern:
+        glob_pattern:
         - "*.{d.ts,js}{,.map}"
         - "!(node_modules)/**/*.{d.ts,js}{,.map}"
         - "lib/typings/types.ts"
@@ -79,8 +79,8 @@ build:
     - ${repo.owner}/${repo.name}/${branch}/${sha}/version
   output:
     - '${repo.owner}/${repo.name}/${branch}/${sha}/npm/build':
-      pattern:
-        glob_pattern:
+        pattern:
+          glob_pattern:
           - "*.{d.ts,js}{,.map}"
           - "!(node_modules)/**/*.{d.ts,js}{,.map}"
           - "lib/typings/types.ts"
