@@ -2,6 +2,7 @@ images:
 - &node_image node:${parameter.tag:lts}
 
 install:
+  name: npm ${parameters.command:ci}
   containers:
   - name: npm ${parameters.command:ci}
     image: *node_image
@@ -17,12 +18,13 @@ install:
       echo "atm:phase=npm ${parameters.command:ci}" &&
       npm ${parameters.command:ci}
   output:
-  - '${repo.owner}/${repo.name}/${branch}/${sha}/npm/node-modules':
-      pattern:
-        directory: node_modules
+  - classifier: ${repo.owner}/${repo.name}/${branch}/${sha}/npm/node-modules
+    pattern:
+      directory: node_modules
   retry: true
 
 compile:
+  name: npm ${parameters.command:compile}
   containers:
   - name: npm ${parameters.command:compile}
     image: *node_image
@@ -33,19 +35,20 @@ compile:
       echo "atm:phase=npm ${parameters.command:compile}" &&
       npm run ${parameters.command:compile} --if-present
   input:
-  - ${repo.owner}/${repo.name}/${branch}/${sha}/version
-  - ${repo.owner}/${repo.name}/${branch}/${sha}/npm/node-modules
+  - classifier: ${repo.owner}/${repo.name}/${branch}/${sha}/version
+  - classifier: ${repo.owner}/${repo.name}/${branch}/${sha}/npm/node-modules
   output:
-  - '${repo.owner}/${repo.name}/${branch}/${sha}/npm/build':
-      pattern:
-        glob_pattern:
-        - "*.{d.ts,js}{,.map}"
-        - "!(node_modules)/**/*.{d.ts,js}{,.map}"
-        - "lib/typings/types.ts"
-        - "git-info.json"
+  - classifier: ${repo.owner}/${repo.name}/${branch}/${sha}/npm/build
+    pattern:
+      glob_pattern:
+      - "*.{d.ts,js}{,.map}"
+      - "!(node_modules)/**/*.{d.ts,js}{,.map}"
+      - "lib/typings/types.ts"
+      - "git-info.json"
   retry: true
 
 test:
+  name: npm test
   containers:
   - name: npm test
     image: *node_image
@@ -56,12 +59,13 @@ test:
       echo "atm:phase=npm test" &&
       npm run test --if-present
   input:
-  - ${repo.owner}/${repo.name}/${branch}/${sha}/version
-  - ${repo.owner}/${repo.name}/${branch}/${sha}/npm/node-modules
-  - ${repo.owner}/${repo.name}/${branch}/${sha}/npm/build
+  - classifier: ${repo.owner}/${repo.name}/${branch}/${sha}/version
+  - classifier: ${repo.owner}/${repo.name}/${branch}/${sha}/npm/node-modules
+  - classifier: ${repo.owner}/${repo.name}/${branch}/${sha}/npm/build
   retry: true
 
 build:
+  name: npm build
   containers:
   - name: npm build
     image: *node_image
@@ -76,18 +80,19 @@ build:
       echo "atm:phase=npm test" &&
       npm run test --if-present
   input:
-    - ${repo.owner}/${repo.name}/${branch}/${sha}/version
+    - classifier: ${repo.owner}/${repo.name}/${branch}/${sha}/version
   output:
-    - '${repo.owner}/${repo.name}/${branch}/${sha}/npm/build':
-        pattern:
-          glob_pattern:
-          - "*.{d.ts,js}{,.map}"
-          - "!(node_modules)/**/*.{d.ts,js}{,.map}"
-          - "lib/typings/types.ts"
-          - "git-info.json"
+    - classifier: '${repo.owner}/${repo.name}/${branch}/${sha}/npm/build'
+      pattern:
+        glob_pattern:
+        - "*.{d.ts,js}{,.map}"
+        - "!(node_modules)/**/*.{d.ts,js}{,.map}"
+        - "lib/typings/types.ts"
+        - "git-info.json"
   retry: true
 
 publish:
+  name: npm publish
   containers:
   - name: npm publish
     image: *node_image
@@ -104,6 +109,6 @@ publish:
           provider:
             type: npm
   input:
-  - ${repo.owner}/${repo.name}/${branch}/${sha}/version
-  - ${repo.owner}/${repo.name}/${branch}/${sha}/npm/build
+  - classifier: ${repo.owner}/${repo.name}/${branch}/${sha}/version
+  - classifier: ${repo.owner}/${repo.name}/${branch}/${sha}/npm/build
   retry: true
